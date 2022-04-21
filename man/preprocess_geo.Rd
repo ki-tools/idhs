@@ -6,6 +6,11 @@
 \usage{
 preprocess_geo(x, output_dir)
 }
+\arguments{
+\item{x}{TODO}
+
+\item{output_dir}{TODO}
+}
 \description{
 Preprocess (download) shapfiles associated with an IPUMS extract
 }

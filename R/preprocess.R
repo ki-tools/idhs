@@ -1,4 +1,6 @@
 #' Preprocess IPUMS extract
+#' @param input_xml TODO
+#' @param output_file TODO
 #' @importFrom ipumsr read_ipums_ddi read_ipums_micro as_factor lbl_clean
 #' @importFrom dplyr rename_all
 #' @examples
@@ -26,6 +28,8 @@ preprocess_ipums <- function(input_xml, output_file) {
 # https://www.idhsdata.org/idhs/gis.shtml
 
 #' Preprocess (download) shapfiles associated with an IPUMS extract
+#' @param x TODO
+#' @param output_dir TODO
 #' @examples
 #' \dontrun{
 #' dd <- preprocess_ipums(

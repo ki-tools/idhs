@@ -6,6 +6,11 @@
 \usage{
 preprocess_ipums(input_xml, output_file)
 }
+\arguments{
+\item{input_xml}{TODO}
+
+\item{output_file}{TODO}
+}
 \description{
 Preprocess IPUMS extract
 }

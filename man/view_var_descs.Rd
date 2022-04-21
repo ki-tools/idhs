@@ -4,7 +4,12 @@
 \alias{view_var_descs}
 \title{View html table of IPUMS extract variable descriptions}
 \usage{
-view_var_descs(dd, include_geo = FALSE)
+view_var_descs(x, include_geo = FALSE)
+}
+\arguments{
+\item{x}{TODO}
+
+\item{include_geo}{TODO}
 }
 \description{
 View html table of IPUMS extract variable descriptions

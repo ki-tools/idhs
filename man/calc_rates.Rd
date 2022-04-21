@@ -2,12 +2,26 @@
 % Please edit documentation in R/calc.R
 \name{calc_rates}
 \alias{calc_rates}
-\title{Calculate rates from ipums data and associated geography}
+\title{Calculate rates from IPUMS DHS data}
 \usage{
-calc_rates(x, geo_dir)
+calc_rates(x, geo_dir, num_var, num_cond, denom_var = NULL, denom_cond = NULL)
+}
+\arguments{
+\item{x}{TODO}
+
+\item{geo_dir}{TODO}
+
+\item{num_var}{TODO}
+
+\item{num_cond}{TODO}
+
+\item{denom_var}{TODO}
+
+\item{denom_cond}{TODO
+Calculate rates from ipums data and associated geography}
 }
 \description{
-Calculate rates from ipums data and associated geography
+Calculate rates from IPUMS DHS data
 }
 \examples{
 \dontrun{
