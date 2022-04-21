@@ -66,9 +66,9 @@ calc_rates <- function(
     cur_var <- gsub(".*(geo_.*).zip", "\\1", f)
     cur_cntry <- geodf$cntry_name[1]
     message(cur_cntry, ": ", cur_var)
-    if (cur_cntry == "South Africa") {
-      geodf <- fix_south_africa_geo(geodf)
-    }
+    # if (cur_cntry == "South Africa") {
+    #   geodf <- fix_south_africa_geo(geodf)
+    # }
 
     if (!cur_var %in% xnms) {
       message("  not found...")
@@ -174,16 +174,16 @@ calc_rates <- function(
   res
 }
 
-#' @importFrom sf st_sfc
-fix_south_africa_geo <- function(a) {
-  idx <- which(a$admin_name == "Western Cape")
-  if (length(idx) == 1) {
-    bb <- a$geometry[[idx]]
-    bb <- bb[-c(1:8)]
-    a$geometry[[idx]] <- sf::st_multipolygon(bb)
-    attr(a$geometry, "bbox") <- NULL
-    a$geometry <- sf::st_sfc(a$geometry)
-  }
-  a
-}
-# ipumsr::read_ipums_sf("ext-data/idhs/geo/geo_za1998_2016.zip")
+# #' @importFrom sf st_sfc
+# fix_south_africa_geo <- function(a) {
+#   idx <- which(a$admin_name == "Western Cape")
+#   if (length(idx) == 1) {
+#     bb <- a$geometry[[idx]]
+#     bb <- bb[-c(1:8)]
+#     a$geometry[[idx]] <- sf::st_multipolygon(bb)
+#     attr(a$geometry, "bbox") <- NULL
+#     a$geometry <- sf::st_sfc(a$geometry)
+#   }
+#   a
+# }
+# # ipumsr::read_ipums_sf("ext-data/idhs/geo/geo_za1998_2016.zip")
