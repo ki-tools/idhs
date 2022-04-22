@@ -38,6 +38,13 @@ scatter_vis_all <- function(rates) {
   maxrng <- max(alldat$pct)
   yrrng <- range(alldat$year)
 
+  nrows <- 3
+  ncols <- ceiling(nrow(pdat) / nrows)
+  xpand <- function(rng, mult = 0.07) {
+    dff <- diff(rng)
+    c(rng[1] - mult * dff, rng[2] + mult * dff)
+  }
+
   figs <- lapply(seq_len(nrow(pdat)), function(ii) {
     curr <- tidyr::nest(pdat$rdat[[ii]], data = -c("region"))
     curc <- pdat$cdat[[ii]]
@@ -65,24 +72,26 @@ scatter_vis_all <- function(rates) {
           y = tmp$pct,
           color = I("darkgray"),
           line = list(width = 3),
-          size = 4,
+          size = 3,
           alpha = 0.6,
           name = paste(cur_cntry, cur_reg, sep = "___"),
           type = "scatter",
           mode = "lines+markers",
           hoverinfo = "text",
-          text = paste0(round(tmp$pct, 1), "%<br>Region: ", cur_reg),
+          text = paste0(round(tmp$pct, 1),
+            "% (", round(tmp$lower, 1), " \u2013 ", round(tmp$upper, 1),
+            ")<br>Country: ",cur_cntry, "<br>Region: ", cur_reg),
           showlegend = FALSE,
           name = paste(cur_cntry, cur_reg, sep = "___")
         ) %>%
         plotly::layout(
           yaxis = list(
-            range = list(0, maxrng),
+            range = xpand(c(0, maxrng)),
             zeroline = FALSE
           ),
           # TODO: determine fixed tickvals dynamically
           xaxis = list(
-            range = list(yrrng[1] - 1, yrrng[2] + 1),
+            range = xpand(c(yrrng[1], yrrng[2])),
             tickmode = "array",
             ticktext = c(
               "'00",
@@ -111,8 +120,63 @@ scatter_vis_all <- function(rates) {
     fig
   })
 
-  res <- plotly::subplot(figs, nrows = 2, shareY = TRUE, shareX = TRUE,
-    margin = 0.004)
+  annotations <- lapply(seq_len(nrow(pdat)), function(ii) {
+    cur_col <- (ii - 1) %% ncols + 1
+    cur_row <- ceiling(ii / ncols)
+    list(
+      x = (1 / ncols) / 2 + (cur_col - 1) * (1 / ncols),
+      y = 1 - (cur_row - 1) * (1 / nrows),
+      text = as.character(pdat$country[ii]),
+      xref = "paper",
+      yref = "paper",
+      xanchor = "center",
+      yanchor = ifelse(cur_row == 1, "bottom", "top"),
+      showarrow = FALSE
+    )
+  })
+
+  annotations <- c(annotations, list(
+    list(
+      text = "Survey Year",
+      x = 0.5,
+      y = 0,
+      showarrow = FALSE,
+      ax = 0,
+      ay = 0,
+      font = list(
+        size = 14.6118721461187
+      ),
+      xref = "paper",
+      yref = "paper",
+      textangle = 0,
+      xanchor = "center",
+      yanchor = "top",
+      annotationType = "axis",
+      yshift = -19
+    ),
+    list(
+      text = "STI Rate",
+      x = 0,
+      y = 0.5,
+      showarrow = FALSE,
+      ax = 0,
+      ay = 0,
+      font = list(
+        size = 14.6118721461187
+      ),
+      xref = "paper",
+      yref = "paper",
+      textangle = -90,
+      xanchor = "right",
+      yanchor = "center",
+      annotationType = "axis",
+      xshift = -24
+    )
+  ))
+
+  res <- plotly::subplot(figs, nrows = nrows, shareY = TRUE, shareX = TRUE,
+    margin = c(0.004, 0.004, 0.02, 0.02)) %>%
+    layout(annotations = annotations)
 
   res$elementId <- "scatterplot"
 

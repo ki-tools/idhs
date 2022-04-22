@@ -1,4 +1,4 @@
-library()
+library(idhs)
 # load_all()
 
 # NOTE: before running this script run the code in data.R
