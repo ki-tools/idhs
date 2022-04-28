@@ -13,7 +13,9 @@ get_ci <- function(x, n) {
 #' @importFrom forcats fct_reorder
 #' @importFrom tidyr nest
 #' @export
-scatter_vis_all <- function(rates) {
+scatter_vis_all <- function(
+  rates, title = "scatterplot", subtitle = "", ylab = ""
+) {
   alldat <- dplyr::bind_rows(
     lapply(rates, function(x) x$yrregstats)) %>%
     dplyr::mutate(
@@ -123,10 +125,13 @@ scatter_vis_all <- function(rates) {
   annotations <- lapply(seq_len(nrow(pdat)), function(ii) {
     cur_col <- (ii - 1) %% ncols + 1
     cur_row <- ceiling(ii / ncols)
+    ctry_txt <- as.character(pdat$country[ii])
+    if (ctry_txt == "Congo Democratic Republic")
+      ctry_txt <- "DR Congo"
     list(
       x = (1 / ncols) / 2 + (cur_col - 1) * (1 / ncols),
       y = 1 - (cur_row - 1) * (1 / nrows),
-      text = as.character(pdat$country[ii]),
+      text = ctry_txt,
       xref = "paper",
       yref = "paper",
       xanchor = "center",
@@ -155,7 +160,7 @@ scatter_vis_all <- function(rates) {
       yshift = -19
     ),
     list(
-      text = "STI Rate",
+      text = ylab,
       x = 0,
       y = 0.5,
       showarrow = FALSE,
@@ -182,5 +187,48 @@ scatter_vis_all <- function(rates) {
 
   res$sizingPolicy$defaultHeight <- "100%"
 
-  res
+  tags <- htmltools::tags
+
+  res2 <- htmltools::tagList(
+    tags$head(tags$style("
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+      .scatter-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .scatter-title {
+        font-size: 25px;
+        padding-top: 5px;
+        padding-bottom: 1px;
+        padding-left: 20px;
+      }
+      .scatter-subtitle {
+        font-size: 14px;
+        padding-top: 1px;
+        padding-bottom: 5px;
+        padding-left: 20px;
+      }
+    ")),
+    tags$div(
+      class = "scatter-container",
+      tags$div(
+        class = "scatter-title",
+        title
+      ),
+      tags$div(
+        class = "scatter-subtitle",
+        subtitle
+      ),
+      res
+    )
+  )
+
+  class(res2) <- c("idhs_browsable", class(res2))
+
+  res2
 }

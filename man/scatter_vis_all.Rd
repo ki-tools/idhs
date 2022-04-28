@@ -4,7 +4,7 @@
 \alias{scatter_vis_all}
 \title{Create scatterplot visualization for all geographies}
 \usage{
-scatter_vis_all(rates)
+scatter_vis_all(rates, title = "scatterplot", subtitle = "", ylab = "")
 }
 \arguments{
 \item{rates}{TODO}

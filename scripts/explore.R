@@ -29,19 +29,32 @@ sti_rates <- calc_rates(dd,
 # -------------------- visualizations -------------------- #
 
 # individual scatter
-scatter_vis_all(sti_rates)
+scatter_vis_all(
+  sti_rates,
+  title = "Women reporting an STI in the 12 months preceding the survey",
+  subtitle = "Among women who ever had sexual intercourse, by country subregion",
+  ylab = "Percentage of women reporting an STI"
+)
 
 # individual geo
 geo_vis_all(sti_rates,
-  title = "STI rates",
+  title = "Percent STI for latest country survey",
   geo_dir = "ext-data/idhs/geo/",
   bins = c(0, 2, 4, 6, 10, 15, 35)
 )
 
 # joint
-geo_scatter_vis(
+a <- geo_scatter_vis(
   sti_rates,
-  title = "STI rates",
+  title = "Women reporting an STI in the 12 months preceding the survey",
+  subtitle = "Among women who ever had sexual intercourse, by country subregion (hover a point to see percentage and 95% CI)",
+  ylab = "Percentage of women reporting an STI",
+  geo_title = "Percent STI for latest country survey",
   geo_dir = "ext-data/idhs/geo/",
   bins = c(0, 2, 4, 6, 10, 15, 35)
 )
+
+htmltools::save_html(a, file = "docs/sti_women/index.html")
+
+b <- view_var_descs(dd)
+htmltools::save_html(b, file = "docs/vars/index.html")

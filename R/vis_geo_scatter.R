@@ -5,12 +5,18 @@
 #' @param bins TODO
 #' @importFrom htmltools browsable
 #' @export
-geo_scatter_vis <- function(rates, title, geo_dir, bins = NULL) {
-  p1 <- scatter_vis_all(rates)
+geo_scatter_vis <- function(
+  rates, title, subtitle, ylab, geo_title, geo_dir, bins = NULL
+) {
+  p1 <- scatter_vis_all(rates,
+    title = title,
+    subtitle = subtitle,
+    ylab = ylab
+  )
 
   p2 <- geo_vis_all(
     rates = rates,
-    title = title,
+    title = geo_title,
     geo_dir = geo_dir,
     bins = bins,
     width = "40vw"
@@ -30,5 +36,7 @@ geo_scatter_vis <- function(rates, title, geo_dir, bins = NULL) {
     )
   )
 
-  htmltools::browsable(res)
+  class(res) <- c("idhs_browsable", class(res))
+
+  res
 }

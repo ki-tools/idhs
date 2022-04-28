@@ -163,26 +163,27 @@ build_map <- function(p, bins, leglbl, cols, title, bboxstr, height, width) {
             e.features.length > 0 &&
             e.features[0].properties.country_region !== hoveredId
           ) {
-            Plotly.restyle(scatter, {'line': {'color': 'darkgray'}}, [])
+            // Plotly.restyle(scatter, {'line': {'color': 'darkgray'}}, [])
             hoveredId = e.features[0].properties.country_region;
             curmap.setPaintProperty(
               'map-lines',
               'line-opacity',
               ['match', ['get', 'country_region'], hoveredId, 1, 0.1]
             );
+
             curmap.setPaintProperty(
               'map-lines',
               'line-width',
               ['match', ['get', 'country_region'], hoveredId, 3, 1]
             );
-            var traceidx = scatter.data.findIndex(obj => {
-              return obj.name === hoveredId;
-            });
-            if (traceidx > -1) {
-              // console.log('restyling hover...');
-              // Plotly.addTraces(scatterplot, [{x: [2010], y: [20], mode: 'markers', marker: {symbol: 6, size: 12}, xaxis: 'x', yaxis: 'y'}])
-              Plotly.restyle(scatter, {'line': {'color': 'blue'}}, [traceidx])
-            }
+            // var traceidx = scatter.data.findIndex(obj => {
+            //   return obj.name === hoveredId;
+            // });
+            // if (traceidx > -1) {
+            //   console.log('restyling hover...');
+            //   Plotly.addTraces(scatterplot, [{x: [2010], y: [20], mode: 'markers', marker: {symbol: 6, size: 12}, xaxis: 'x', yaxis: 'y'}])
+            //   Plotly.restyle(scatter, {'line': {'color': 'blue'}}, [traceidx])
+            // }
           }
         };
 
@@ -199,7 +200,7 @@ build_map <- function(p, bins, leglbl, cols, title, bboxstr, height, width) {
           );
 
           // console.log('restyling unhover...');
-          Plotly.restyle(scatter, {'line': {'color': 'darkgray'}}, [])
+          // Plotly.restyle(scatter, {'line': {'color': 'darkgray'}}, [])
           hoveredId = null;
         };
 
@@ -210,7 +211,7 @@ build_map <- function(p, bins, leglbl, cols, title, bboxstr, height, width) {
 
         scatterplot.on('plotly_hover', function(d) {
           // console.log('restyling plotly hover...')
-          Plotly.restyle(scatterplot, {'line': {'color': 'blue'}}, [d.points[0].curveNumber])
+          // Plotly.restyle(scatterplot, {'line': {'color': 'blue'}}, [d.points[0].curveNumber])
           var hoveredId = d.points[0].data.name;
           var country = hoveredId.split('___')[0];
           if (bboxes && bboxes[country]) {
@@ -243,7 +244,7 @@ build_map <- function(p, bins, leglbl, cols, title, bboxstr, height, width) {
             1
           );
           // console.log('restyling plotly unhover...')
-          Plotly.restyle(scatterplot, {'line': {'color': 'darkgray'}}, [d.points[0].curveNumber]);
+          // Plotly.restyle(scatterplot, {'line': {'color': 'darkgray'}}, [d.points[0].curveNumber]);
         });
       }
     ")),
@@ -256,17 +257,22 @@ build_map <- function(p, bins, leglbl, cols, title, bboxstr, height, width) {
         width: fit-content;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
       }
-      .title {
+      .geo-title {
         position: absolute;
         font-size: 16px;
         top: 0;
-        left: 0;
+        right: 10px;
+        font-style: italic;
+        padding: 4px;
+        color: #565656;
+        font-weight: 300;
+        background: rgba(255, 255, 255, 0.7);
       }
       .legend-container {
         position: absolute;
         display: flex;
         flex-direction: column;
-        top: 10px;
+        top: 26px;
         right: 10px;
         background: rgba(255, 255, 255, 0.7);
       }
@@ -288,7 +294,7 @@ build_map <- function(p, bins, leglbl, cols, title, bboxstr, height, width) {
       class = "geo-container",
       style = paste0("width: ", width, "; height: ", height, ";"),
       p,
-      tags$div(class = "title", title),
+      tags$div(class = "geo-title", title),
       tags$div(class = "legend-container",
         lapply(seq_along(leglbl), function(ii) {
           tags$div(class = "legend-entry",
@@ -306,13 +312,13 @@ build_map <- function(p, bins, leglbl, cols, title, bboxstr, height, width) {
     )
   )
 
-  class(res) <- c("idhs_map_vis", class(res))
+  class(res) <- c("idhs_browsable", class(res))
 
   res
 }
 
 #' @export
-print.idhs_map_vis <- function(x, ...) {
-  class(x) <- setdiff(class(x), "idhs_map_vis")
+print.idhs_browsable <- function(x, ...) {
+  class(x) <- setdiff(class(x), "idhs_browsable")
   print(htmltools::browsable(x))
 }

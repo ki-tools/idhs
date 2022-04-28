@@ -4,7 +4,7 @@
 \alias{geo_scatter_vis}
 \title{Create linked scatter and geo visualization}
 \usage{
-geo_scatter_vis(rates, title, geo_dir, bins = NULL)
+geo_scatter_vis(rates, title, subtitle, ylab, geo_title, geo_dir, bins = NULL)
 }
 \arguments{
 \item{rates}{TODO}
